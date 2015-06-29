@@ -1,0 +1,105 @@
+#MAIN
+evalthreads = 				1
+breedthreads = 				1
+seed.0 =				time
+checkpoint =				false
+checkpoint-modulo =                     1
+checkpoint-prefix = 			ec
+print-params =                          true
+print-unused-params =               true
+
+#STATISTICS
+stat =                                  ec.multiobjective.MultiObjectiveStatistics
+stat.file =				$salida.stat
+stat.front =                            $paretofront.stat
+
+
+
+# ==============================
+# EA
+# ==============================
+state = 				ec.simple.SimpleEvolutionState
+init = 					ec.simple.SimpleInitializer
+finish = 	        		ec.simple.SimpleFinisher
+exch = 					ec.simple.SimpleExchanger
+#breed =					ec.simple.SimpleBreeder
+#eval =					ec.simple.SimpleEvaluator
+# run for 51 generations, quit prematurely if I find something ideal
+generations =				51
+quit-on-run-complete =			true
+pop = 					ec.Population
+# No multiple populations
+pop.subpops =				1
+pop.subpop.0 = 				ec.Subpopulation
+pop.subpop.0.size =			1024
+# don't bother trying to eliminate duplicates from the
+# initial population
+pop.subpop.0.duplicate-retries =	0
+
+# breed.elite.0 = 			10
+
+# ==============================
+# OPERATORS
+# ==============================
+pop.subpop.0.species.crossover-type = sbx
+pop.subpop.0.species.crossover-distribution-index = 20
+
+pop.subpop.0.species.mutation-type = polynomial
+pop.subpop.0.species.mutation-distribution-index = 20
+pop.subpop.0.species.mutation-bounded = true
+
+
+			= 2
+
+# ==============================
+# MULTI-OBJECTIVE ALGORITHM
+# ==============================
+
+#NSGA2-PIPELINE
+pop.subpop.0.species.pipe		     	= ec.vector.breed.VectorMutationPipeline
+pop.subpop.0.species.pipe.likelihood        	= 1.0
+pop.subpop.0.species.pipe.source.0		= ec.vector.breed.VectorCrossoverPipeline
+pop.subpop.0.species.pipe.source.0.likelihood 	= 0.9
+pop.subpop.0.species.pipe.source.0.source.0 	= ec.select.TournamentSelection
+pop.subpop.0.species.pipe.source.0.source.1 	= same
+select.tournament.size 	= 2
+#/NSGA2-PIPELINE
+
+#NSGA2 SPECIES
+pop.subpop.0.species.fitness =	ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
+eval =				ec.multiobjective.nsga2.NSGA2Evaluator
+breed =				ec.multiobjective.nsga2.NSGA2Breeder
+#/NSGA2 SPECIES
+
+
+
+#OBJECTIVES
+multi.fitness.num-objectives 	= 2
+multi.fitness.maximize.0 = false
+multi.fitness.max.0 		= 1
+multi.fitness.min.0 		= 0
+multi.fitness.maximize.1 = false
+multi.fitness.max.1 		= 1
+multi.fitness.min.1 		= 0
+#/OBJECTIVES
+
+
+
+
+# ==============================
+#GENOME
+# ==============================
+pop.subpop.0.species = ec.vector.FloatVectorSpecies
+pop.subpop.0.species.ind = ec.vector.DoubleVectorIndividual
+
+pop.subpop.0.species.min-gene = 0
+pop.subpop.0.species.max-gene = 1
+
+pop.subpop.0.species.genome-size = 10
+pop.subpop.0.species.mutation-prob = 0.1
+
+
+# ==============================
+#PROBLEM
+# ==============================
+eval.problem = es.ugr.hpmoon.SOMEvaluator
