@@ -31,7 +31,7 @@ pop = 					ec.Population
 # No multiple populations
 pop.subpops =				1
 pop.subpop.0 = 				ec.Subpopulation
-pop.subpop.0.size =			1024
+pop.subpop.0.size =			32
 # don't bother trying to eliminate duplicates from the
 # initial population
 pop.subpop.0.duplicate-retries =	0
@@ -48,15 +48,12 @@ pop.subpop.0.species.mutation-type = polynomial
 pop.subpop.0.species.mutation-distribution-index = 20
 pop.subpop.0.species.mutation-bounded = true
 
-
-			= 2
-
 # ==============================
 # MULTI-OBJECTIVE ALGORITHM
 # ==============================
 
 #NSGA2-PIPELINE
-pop.subpop.0.species.pipe		     	= ec.vector.breed.VectorMutationPipeline
+pop.subpop.0.species.pipe		     	= es.ugr.hpmoon.ChunkMutatorPipeline
 pop.subpop.0.species.pipe.likelihood        	= 1.0
 pop.subpop.0.species.pipe.source.0		= ec.vector.breed.VectorCrossoverPipeline
 pop.subpop.0.species.pipe.source.0.likelihood 	= 0.9
@@ -96,7 +93,7 @@ pop.subpop.0.species.min-gene = 0
 pop.subpop.0.species.max-gene = 1
 
 pop.subpop.0.species.genome-size = 10
-pop.subpop.0.species.mutation-prob = 0.1
+pop.subpop.0.species.mutation-prob = 1
 
 
 # ==============================
