@@ -1,0 +1,60 @@
+#
+parent.0 =  hpmoon-MO.params
+
+#EXCHANGER
+exch = ec.exchange.InterPopulationExchange
+
+#Common to all islands
+exch.size = 3 
+exch.start = 1
+exch.mod = 10
+
+#ISLANDS INFORMATION
+pop.subpops = 10
+
+#copy the parameters of island 0
+pop.default-subpop = 0
+
+
+#Which ones to send? Select from the "n" best using a tournament of "size"
+exch.select = ec.select.TournamentSelection
+#exch.subpop.0.select.n = 5
+#exch.subpop.0.select.n = 5
+#exch.subpop.0.select.size = 2
+#How to replace with the received? 
+#exch.select-to-die = ec.select.BestSelection
+#exch.subpop.select-to-die.pick-worst = true
+#exch.subpop.select-to-die.n = 5
+#exch.subpop.select-to-die.size = 2
+
+
+
+
+
+
+#topology
+#ring
+
+exch.subpop.0.num-dest = 1
+exch.subpop.1.num-dest = 1
+exch.subpop.2.num-dest = 1
+exch.subpop.3.num-dest = 1
+exch.subpop.4.num-dest = 1
+exch.subpop.5.num-dest = 1
+exch.subpop.6.num-dest = 1
+exch.subpop.7.num-dest = 1
+exch.subpop.8.num-dest = 1
+exch.subpop.9.num-dest = 1
+
+exch.subpop.0.dest.0 = 1
+exch.subpop.1.dest.0 = 2
+exch.subpop.2.dest.0 = 3
+exch.subpop.3.dest.0 = 4
+exch.subpop.4.dest.0 = 5
+exch.subpop.5.dest.0 = 6
+exch.subpop.6.dest.0 = 7
+exch.subpop.7.dest.0 = 8
+exch.subpop.8.dest.0 = 9
+exch.subpop.9.dest.0 = 0
+
+#exch.chatty = false

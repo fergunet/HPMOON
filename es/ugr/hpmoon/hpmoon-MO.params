@@ -5,7 +5,7 @@ seed.0 =				time
 checkpoint =				false
 checkpoint-modulo =                     1
 checkpoint-prefix = 			ec
-print-params =                          true
+print-params =                          false
 print-unused-params =               true
 
 #STATISTICS
@@ -39,6 +39,18 @@ pop.subpop.0.duplicate-retries =	0
 # breed.elite.0 = 			10
 
 # ==============================
+#GENOME
+# ==============================
+pop.subpop.0.species = ec.vector.FloatVectorSpecies
+pop.subpop.0.species.ind = ec.vector.DoubleVectorIndividual
+
+pop.subpop.0.species.min-gene = 0
+pop.subpop.0.species.max-gene = 1
+
+pop.subpop.0.species.genome-size = 10
+pop.subpop.0.species.mutation-prob = 1
+
+# ==============================
 # OPERATORS
 # ==============================
 pop.subpop.0.species.crossover-type = sbx
@@ -55,7 +67,7 @@ pop.subpop.0.species.mutation-bounded = true
 #NSGA2-PIPELINE
 pop.subpop.0.species.pipe		     	= es.ugr.hpmoon.ChunkMutatorPipeline
 pop.subpop.0.species.pipe.likelihood        	= 1.0
-pop.subpop.0.species.pipe.source.0		= ec.vector.breed.VectorCrossoverPipeline
+pop.subpop.0.species.pipe.source.0		= es.ugr.hpmoon.ChunkCrossoverPipeline
 pop.subpop.0.species.pipe.source.0.likelihood 	= 0.9
 pop.subpop.0.species.pipe.source.0.source.0 	= ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.1 	= same
@@ -79,21 +91,6 @@ multi.fitness.maximize.1 = false
 multi.fitness.max.1 		= 1
 multi.fitness.min.1 		= 0
 #/OBJECTIVES
-
-
-
-
-# ==============================
-#GENOME
-# ==============================
-pop.subpop.0.species = ec.vector.FloatVectorSpecies
-pop.subpop.0.species.ind = ec.vector.DoubleVectorIndividual
-
-pop.subpop.0.species.min-gene = 0
-pop.subpop.0.species.max-gene = 1
-
-pop.subpop.0.species.genome-size = 10
-pop.subpop.0.species.mutation-prob = 1
 
 
 # ==============================
