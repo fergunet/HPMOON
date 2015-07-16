@@ -42,7 +42,14 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
 
     @Override
     public int produce(int min, int max, int start, int subpopulation, Individual[] inds, EvolutionState state, int thread) {
-         // grab individuals from our source and stick 'em right into inds.
+        //Extracting island id 
+        int[]info =  HPMOONUtils.getIslandIdAndNumIslands(state, subpopulation, thread);
+        int numberOfIslands = info[1];
+        int islandId = info[0];
+        
+        
+
+// grab individuals from our source and stick 'em right into inds.
         // we'll modify them from there
         int n = sources[0].produce(min,max,start,subpopulation,inds,state,thread);
 
@@ -65,8 +72,7 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
             VectorIndividual vi = (VectorIndividual) inds[q];
 
             state.output.message("BEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
-            int numberOfIslands = 3;
-            int islandId = 2;
+            
             
             int chunkSize = vi.genomeLength()/numberOfIslands;
                        

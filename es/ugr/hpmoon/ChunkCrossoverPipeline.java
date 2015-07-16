@@ -79,6 +79,15 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         final int thread) 
 
         {
+            
+        //Extracting island id
+        int[]info =  HPMOONUtils.getIslandIdAndNumIslands(state, subpopulation, thread);
+        int numberOfIslands = info[1];
+        int islandId = info[0];
+       
+            
+            
+            
         // how many individuals should we make?
         int n = typicalIndsProduced();
         if (n < min) n = min;
@@ -123,8 +132,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             //parents[1].evaluated=false;
             
             //STARTS CHUNK CODE by pgarcia
-            int numberOfIslands = 3;
-            int islandId = 2;
+            
             
             VectorIndividual parent0 = parents[0];
             VectorIndividual parent1 = parents[1];
