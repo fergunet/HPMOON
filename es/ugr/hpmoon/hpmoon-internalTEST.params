@@ -96,32 +96,24 @@ pop.subpop.2.size = 10
 
 exch = ec.exchange.InterPopulationExchange
 
-exch.subpop.0.select = ec.select.TournamentSelection
+exch.select = ec.select.TournamentSelection
+#the size for each subpop is necessary
 exch.subpop.0.select.size = 2
-exch.subpop.0.mod = 2
-exch.subpop.0.start = 0
-exch.subpop.0.size = 3
-exch.subpop.0.num-dest = 2
-exch.subpop.0.dest.0 = 1
-exch.subpop.0.dest.1 = 2
-
-exch.subpop.1.select = ec.select.TournamentSelection
 exch.subpop.1.select.size = 2
-exch.subpop.1.mod = 2
-exch.subpop.1.start = 0
-exch.subpop.1.size = 3
-exch.subpop.1.num-dest = 2
-exch.subpop.1.dest.0 = 1
-exch.subpop.1.dest.1 = 2
-
-exch.subpop.2.select = ec.select.TournamentSelection
 exch.subpop.2.select.size = 2
-exch.subpop.2.mod = 2
-exch.subpop.2.start = 0
-exch.subpop.2.size = 3
-exch.subpop.2.num-dest = 2
-exch.subpop.2.dest.0 = 1
-exch.subpop.2.dest.1 = 2
+exch.start = 0
+exch.size = 3 
+exch.num-dest = 1
+exch.mod = 5
+
+exch.subpop.0.num-dest = 1
+exch.subpop.0.dest.0 = 1
+exch.subpop.1.num-dest = 1
+exch.subpop.1.dest.0 = 2
+exch.subpop.2.num-dest = 1
+exch.subpop.2.dest.0 = 0
+
+
 
 
 
