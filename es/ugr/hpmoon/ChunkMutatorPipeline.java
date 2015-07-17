@@ -71,7 +71,7 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
                 
             VectorIndividual vi = (VectorIndividual) inds[q];
 
-            state.output.message("BEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
+            //state.output.message("BEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
             
             
             int chunkSize = vi.genomeLength()/numberOfIslands;
@@ -91,7 +91,7 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
             chunks[islandId]=chunk.getGenome();
             vi.join(chunks);
 
-            state.output.message("AFTER  "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
+            //state.output.message("AFTER  "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
 
             vi.evaluated = false;
             }

@@ -137,8 +137,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             VectorIndividual parent0 = parents[0];
             VectorIndividual parent1 = parents[1];
             
-            state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            //state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            //state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             
             int chunkSize = parent0.genomeLength()/numberOfIslands;
                        
@@ -160,13 +160,13 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             
             chunk0.setGenome(chunkGenome0); 
             chunk1.setGenome(chunkGenome1);
-            state.output.message("BEFORECHUNK0 "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
-            state.output.message("BEFORECHUNK1 "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
+            //state.output.message("BEFORECHUNK0 "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
+            //state.output.message("BEFORECHUNK1 "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
             
             chunk0.defaultCrossover(state, thread, chunk1);
             
-            state.output.message("AFTERCHUNK0  "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
-            state.output.message("AFTERCHUNK1  "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
+            //state.output.message("AFTERCHUNK0  "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
+            //state.output.message("AFTERCHUNK1  "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
             
             chunks0[islandId]=chunk0.getGenome();
             chunks1[islandId]=chunk1.getGenome();
@@ -174,8 +174,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             parent0.join(chunks0);
             parent1.join(chunks1);
 
-            state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            //state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            //state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             parent0.evaluated = false;
             parent1.evaluated = false;
             

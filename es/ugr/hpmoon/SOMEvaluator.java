@@ -24,7 +24,7 @@ public class SOMEvaluator extends Problem implements SimpleProblemForm{
         if( !( ind instanceof DoubleVectorIndividual ) )
             state.output.fatal( "The individuals for this problem should be DoubleVectorIndividuals." );
             
-        state.output.message("EVALUANDO EN LA POP "+subpopulation);
+        //state.output.message("EVALUANDO EN LA POP "+subpopulation);
         DoubleVectorIndividual temp = (DoubleVectorIndividual)ind;
         double[] genome = temp.genome;
         int numDecisionVars = genome.length;

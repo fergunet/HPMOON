@@ -41,7 +41,7 @@ public class HPMOONUtils {
         }else{
             Parameter exchanger = new Parameter("exch");
             String islandExc = state.parameters.getString(exchanger, null);
-            if(islandExc.equals("ec.exchange.InterPopulationExchange")){
+            if(islandExc.equals("ec.exchange.InterPopulationExchange") || islandExc.equals("es.ugr.hpmoon.InterPopulationRandomExchange")){
                 info[0] = subpopulation;
                 info[1] = state.population.subpops.length;
             }else{
