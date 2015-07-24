@@ -11,7 +11,7 @@ print-params =                          false
 print-unused-params =               true
 
 #STATISTICS
-stat =                                  ec.multiobjective.MultiObjectiveStatistics
+stat =                                  es.ugr.hpmoon.HPMOONStatistics
 stat.file =				$salida.stat
 stat.front =                            $paretofront.stat
 
