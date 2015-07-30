@@ -2,7 +2,7 @@
 evalthreads = 				1
 breedthreads = 				1
 seed.0 =				time
-jobs = 3
+jobs = 30
 
 checkpoint =				false
 checkpoint-modulo =                     1
@@ -37,7 +37,8 @@ multi.fitness.min.1 		= 0
 # ==============================
 #PROBLEM
 # ==============================
-eval.problem = es.ugr.hpmoon.SOMEvaluator
+eval.problem = ec.app.moosuite.MooSuite
+eval.problem.type = zdt1
 
 # ==============================
 # EA
@@ -45,8 +46,7 @@ eval.problem = es.ugr.hpmoon.SOMEvaluator
 state = 				ec.simple.SimpleEvolutionState
 init = 					ec.simple.SimpleInitializer
 finish = 	        		ec.simple.SimpleFinisher
-# run for 51 generations, quit prematurely if I find something ideal
-generations =				51
+evaluations = 500000
 quit-on-run-complete =			true
 pop = 					ec.Population
 
@@ -72,7 +72,7 @@ pop.subpop.0.species.fitness = ec.multiobjective.nsga2.NSGA2MultiObjectiveFitnes
 pop.subpop.0.species.ind = ec.vector.DoubleVectorIndividual
 pop.subpop.0.species.min-gene = 0
 pop.subpop.0.species.max-gene = 1
-pop.subpop.0.species.genome-size = 10
+pop.subpop.0.species.genome-size = 11
 pop.subpop.0.species.crossover-type = sbx
 pop.subpop.0.species.crossover-distribution-index = 20
 pop.subpop.0.species.mutation-type = polynomial
@@ -83,8 +83,10 @@ pop.subpop.0.duplicate-retries = 100
 #es.ugr.hpmoon.ChunkMutatorPipeline ec.vector.breed.VectorMutationPipeline
 pop.subpop.0.species.pipe = es.ugr.hpmoon.ChunkMutatorPipeline
 pop.subpop.0.species.pipe.likelihood        	= 1.0
+pop.subpop.0.species.pipe.disjoint = false
 #es.ugr.hpmoon.ChunkCrossoverPipeline ec.vector.breed.VectorCrossoverPipeline
 pop.subpop.0.species.pipe.source.0		= es.ugr.hpmoon.ChunkCrossoverPipeline
+pop.subpop.0.species.pipe.source.0.disjoint = none
 pop.subpop.0.species.pipe.source.0.likelihood 	= 0.9
 pop.subpop.0.species.pipe.source.0.source.0 	= ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.0.size = 2
@@ -99,7 +101,6 @@ pop.subpop.4.size = 10
 pop.subpop.5.size = 10
 
 exch = es.ugr.hpmoon.InterPopulationRandomExchange
-
 exch.select = ec.select.TournamentSelection
 #the size for each subpop is necessary
 exch.subpop.0.select.size = 2
@@ -109,7 +110,7 @@ exch.subpop.3.select.size = 2
 exch.subpop.4.select.size = 2
 
 exch.start = 0
-exch.size = 3 
+exch.size = 1 
 exch.mod = 5
 
 

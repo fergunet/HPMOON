@@ -30,10 +30,7 @@ import ec.vector.VectorIndividual;
 public class ChunkCrossoverPipeline extends BreedingPipeline{
     public static final String P_TOSS = "toss";
     public static final String P_CROSSOVER = "chunkxover";
-    public static final String P_DISJOINT = "disjunct";
-    public static final String DISJOINT_TRUE = "true";
-    public static final String DISJOINT_FALSE = "false";
-    public static final String DISJOINT_NONE = "none";
+
     public static final int NUM_SOURCES = 2;
     
     public String disjoint;
@@ -69,9 +66,9 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             def.push(P_TOSS),false);
         
         //DISJUNCT
-        disjunct = state.parameters.getString(base.push(P_DISJOINT), null);
-        if(disjoint==null || (disjo))
-            state.output.fatal("ERROR: parameter "+P_DISJOINT+" must not be null");
+        disjoint = state.parameters.getString(base.push(HPMOONUtils.P_DISJOINT), null);
+        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
+            state.output.fatal("ERROR: parameter "+HPMOONUtils.P_DISJOINT+" must not be null, or different than 'true', 'false' or 'none'");
         }
         
     /** Returns 2 * minimum number of typical individuals produced by any sources, else
@@ -149,108 +146,40 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             VectorIndividual parent1 = parents[1];
             
             
-            state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            //state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            //state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             
-            int chunkSize = parent0.genomeLength()/numberOfIslands;
-                       
-            VectorIndividual chunk0 =  (VectorIndividual) parent0.clone();
-            VectorIndividual chunk1 =  (VectorIndividual) parent1.clone();
+            
 
             //DEBUG!!! DELETE!!!!!!!!!!!!!!!!!!!!!!!!
             //islandId = 0;
            
             //END DEBUG 
             
-            //Creating split points and cutting the individual in pieces
-            int[] points = this.getCutPoints(numberOfIslands, chunkSize, false);
-
             
-            Object[] chunks0 = new Object[numberOfIslands];
-            Object[] chunks1 = new Object[numberOfIslands];
-            parent0.split(points, chunks0);
-            parent1.split(points, chunks1);
            
+            VectorIndividual smallFather = HPMOONUtils.getSubIndividual(parent0, islandId, numberOfIslands, disjoint);
+            VectorIndividual smallMother = HPMOONUtils.getSubIndividual(parent1, islandId, numberOfIslands, disjoint);
+            
+            
+            //state.output.message("BEFORECHUNK0 "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
+            //state.output.message("BEFORECHUNK1 "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
+            
+            smallFather.defaultCrossover(state, thread,smallMother);
+            
+            //state.output.message("AFTERCHUNK0  "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
+            //state.output.message("AFTERCHUNK1  "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
             
             
             
-            //If not using disjunt parameter then add +-1 chunk for parent
-            int pre = (islandId-1)%numberOfIslands;
-            if (pre<0) pre = pre+numberOfIslands;
-            int pos = (islandId+1)%numberOfIslands;
-            int lastsize = parent0.genomeLength()-points[points.length-1];
+            HPMOONUtils.reconstructIndividual(parent0, smallFather, disjoint, islandId, numberOfIslands);
+            HPMOONUtils.reconstructIndividual(parent1, smallMother, disjoint, islandId, numberOfIslands);
             
-            if(disjunct.equals(DISJOINT_FALSE)){
-                state.output.message("DISJUNTOS "+pre+" " +islandId+" "+pos);
-                Object[] forChunk0 = new Object[3];
-                Object[] forChunk1 = new Object[3];
-                
-                 forChunk0[0] = chunks0[pre];
-                 forChunk0[1] = chunks0[islandId]; 
-                 forChunk0[2] = chunks0[pos];
-                
-                 forChunk1[0] = chunks1[pre];
-                 forChunk1[1] = chunks1[islandId]; 
-                 forChunk1[2] = chunks1[pos];
+            
 
-                
-                chunk0.join(forChunk0);
-                chunk1.join(forChunk1);
-                
-                
-                    
-            }else{
-                Object chunkGenome0 = chunks0[islandId]; //TODO check if islands starts in 1!
-                Object chunkGenome1 = chunks1[islandId]; //TODO check if islands starts in 1!
-                chunk0.setGenome(chunkGenome0); 
-                chunk1.setGenome(chunkGenome1);
-            }
-            state.output.message("BEFORECHUNK0 "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
-            state.output.message("BEFORECHUNK1 "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
-            
-            chunk0.defaultCrossover(state, thread, chunk1);
-            
-            state.output.message("AFTERCHUNK0  "+chunk0.genomeLength()+" "+chunk0.genotypeToStringForHumans());
-            state.output.message("AFTERCHUNK1  "+chunk1.genomeLength()+" "+chunk1.genotypeToStringForHumans());
-            
-            
-            
-            if(disjunct.equals(DISJOINT_FALSE)){
-                
-                int[] newpoints = new int[2];
-                newpoints[0] = chunkSize;
-                newpoints[1] = chunkSize*2;
-                
-                if(islandId == 0){
-                    newpoints[0] = lastsize;
-                    newpoints[1] = lastsize + chunkSize;
-                }
-                if(islandId == (numberOfIslands-1)){
-                    newpoints[1] = chunkSize+lastsize;
-                }
 
-                Object[] chunks0_3 = new Object[3]; 
-                chunk0.split(newpoints, chunks0_3);
-                chunks0[pre] = chunks0_3[0];
-                chunks0[islandId] = chunks0_3[1];
-                chunks0[pos] = chunks0_3[2];
-                
-                Object[] chunks1_3 = new Object[3]; 
-                chunk1.split(newpoints, chunks1_3);
-                chunks1[pre] = chunks1_3[0];
-                chunks1[islandId] = chunks1_3[1];
-                chunks1[pos] = chunks1_3[2];
-                
-            }else{
-                chunks0[islandId]=chunk0.getGenome();
-                chunks1[islandId]=chunk1.getGenome();
-            }
-            
-            parent0.join(chunks0);
-            parent1.join(chunks1);
-
-            state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            //state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            //state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             parent0.evaluated = false;
             parent1.evaluated = false;
             
@@ -268,12 +197,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         return n;
         }
     
-    private int[] getCutPoints(int numberOfIslands, int chunkSize, boolean disjunct){
-        int[] cutpoints = new int[numberOfIslands-1];
-            for(int i=0;i<numberOfIslands-1;i++)
-                cutpoints[i] = (i+1)*chunkSize;
-        return cutpoints;
-    }
+
 }
     
     

@@ -32,6 +32,18 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
     public static final String P_CHUNK_MUTATOR = "chunk-mutator";
     public static final int NUM_SOURCES = 1;
     
+    private String disjoint;
+
+    @Override
+    public void setup(EvolutionState state, Parameter base) {
+        super.setup(state, base);
+        //DISJUNCT
+        disjoint = state.parameters.getString(base.push(HPMOONUtils.P_DISJOINT), null);
+        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
+            state.output.fatal("ERROR: parameter "+HPMOONUtils.P_DISJOINT+" must not be null, or different than 'true', 'false' or 'none'");
+        
+    }
+    
     @Override
     public Parameter defaultBase(){
         return VectorDefaults.base().push(P_CHUNK_MUTATOR);
@@ -71,27 +83,14 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
                 
             VectorIndividual vi = (VectorIndividual) inds[q];
 
-            //state.output.message("BEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
+            //state.output.message("MUTBEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
             
-            
-            int chunkSize = vi.genomeLength()/numberOfIslands;
                        
-            VectorIndividual chunk =  (VectorIndividual) vi.clone();
-            
-            //Creating split points and cutting the individual in pieces
-            int[] points = new int[numberOfIslands-1];
-            for(int i=0;i<numberOfIslands-1;i++)
-                points[i] = (i+1)*chunkSize;
-            Object[] chunks = new Object[numberOfIslands];
-            vi.split(points, chunks);
-            
-            Object chunkGenome = chunks[islandId]; //TODO check if islands starts in 1!
-            chunk.setGenome(chunkGenome);            
+            VectorIndividual chunk =  HPMOONUtils.getSubIndividual(vi, islandId, numberOfIslands, disjoint);
             chunk.defaultMutate(state, thread);
-            chunks[islandId]=chunk.getGenome();
-            vi.join(chunks);
-
-            //state.output.message("AFTER  "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
+            HPMOONUtils.reconstructIndividual(vi, chunk, disjoint, islandId, numberOfIslands);
+            
+            //state.output.message("MUTAFTER  "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
 
             vi.evaluated = false;
             }

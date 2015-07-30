@@ -18,12 +18,19 @@ package es.ugr.hpmoon;
 
 import ec.EvolutionState;
 import ec.util.Parameter;
+import ec.vector.VectorIndividual;
+
 
 /**
  *
  * @author pgarcia
  */
 public class HPMOONUtils {
+    
+    public static final String P_DISJOINT = "disjoint";
+    public static final String DISJOINT_TRUE = "true";
+    public static final String DISJOINT_FALSE = "false";
+    public static final String DISJOINT_NONE = "none";
     
     public static int[] getIslandIdAndNumIslands(EvolutionState state, int subpopulation, int thread){
         
@@ -54,6 +61,106 @@ public class HPMOONUtils {
         
         return info;
     
+    }
+    
+        public static int[] getCutPoints(int numberOfIslands, int chunkSize){
+        int[] cutpoints = new int[numberOfIslands-1];
+            for(int i=0;i<numberOfIslands-1;i++)
+                cutpoints[i] = (i+1)*chunkSize;
+        return cutpoints;
+    }
+    
+    public static VectorIndividual getSubIndividual(VectorIndividual ind, int islandId, int numberOfIslands, String disj){
+        
+        int chunkSize = ind.genomeLength()/numberOfIslands;
+                       
+        VectorIndividual chunk0 =  (VectorIndividual) ind.clone();
+        int[] points = getCutPoints(numberOfIslands, chunkSize);
+        
+
+            int pre = (islandId-1)%numberOfIslands;
+            if (pre<0) pre = pre+numberOfIslands;
+            int pos = (islandId+1)%numberOfIslands;
+        
+            //Creating split points and cutting the individual in pieces
+
+            Object[] chunks0 = new Object[numberOfIslands];
+            ind.split(points, chunks0);
+
+            
+            
+            if(disj.equals(DISJOINT_FALSE)){
+               // state.output.message("NO SON DISJUNTOS "+pre+" " +islandId+" "+pos);
+                Object[] forChunk0 = new Object[3];
+
+                
+                 forChunk0[0] = chunks0[pre];
+                 forChunk0[1] = chunks0[islandId]; 
+                 forChunk0[2] = chunks0[pos];
+
+                
+                chunk0.join(forChunk0);
+                return chunk0;
+                
+                
+                    
+            }else{ 
+                if(disj.equals(DISJOINT_TRUE)){
+                    Object chunkGenome0 = chunks0[islandId]; 
+                    chunk0.setGenome(chunkGenome0);
+                    return chunk0;
+                }else{
+                    return chunk0;
+                }
+            }
+    }
+    
+    public static void reconstructIndividual(VectorIndividual originalIndividual, VectorIndividual changedIndividual, String disj, int islandId, int numberOfIslands) {
+
+        int chunkSize = originalIndividual.genomeLength() / numberOfIslands;
+        int pre = (islandId - 1) % numberOfIslands;
+        if (pre < 0) {
+            pre = pre + numberOfIslands;
+        }
+        int pos = (islandId + 1) % numberOfIslands;
+        
+        int[] points = getCutPoints(numberOfIslands, chunkSize);
+
+        int lastsize = originalIndividual.genomeLength() - points[points.length - 1];
+        Object[] chunks0 = new Object[numberOfIslands];
+        originalIndividual.split(points, chunks0);
+
+        if (disj.equals(DISJOINT_FALSE)) {
+
+            int[] newpoints = new int[2];
+            newpoints[0] = chunkSize;
+            newpoints[1] = chunkSize * 2;
+
+            if (islandId == 0) {
+                newpoints[0] = lastsize;
+                newpoints[1] = lastsize + chunkSize;
+            }
+            if (islandId == (numberOfIslands - 1)) {
+                newpoints[1] = chunkSize + lastsize;
+            }
+
+            Object[] chunks0_3 = new Object[3];
+            changedIndividual.split(newpoints, chunks0_3);
+            chunks0[pre] = chunks0_3[0];
+            chunks0[islandId] = chunks0_3[1];
+            chunks0[pos] = chunks0_3[2];
+            originalIndividual.join(chunks0);
+
+        } else {
+            if (disj.equals(DISJOINT_TRUE)) {
+                chunks0[islandId] = changedIndividual.getGenome();
+                originalIndividual.join(chunks0);
+            } else {
+                originalIndividual.setGenome(changedIndividual.getGenome());
+            }
+        }
+
+
     }
     
 }

@@ -25,17 +25,20 @@ import ec.util.Parameter;
  * @author pgarcia
  */
 public class HPMOONStatistics extends MultiObjectiveStatistics{
+    
+    public long initTime;
     @Override
     public void setup(final EvolutionState state, final Parameter base){
         super.setup(state,base);
+        initTime = System.currentTimeMillis();
     }
     
     public void finalStatistics(final EvolutionState state, final int result){
-        bypassFinalStatistics(state, result);  // just call super.super.finalStatistics(...)
-
+        //bypassFinalStatistics(state, result);  // just call super.super.finalStatistics(...)
+        super.finalStatistics(state, result);
         if (doFinal){
-            state.output.println("EXTRA STATISTICS", statisticslog);
-            state.output.println("MEGAPARETO", statisticslog);
+            long spentTime = System.currentTimeMillis() - initTime;
+            state.output.println("TIME "+spentTime, statisticslog);
         }
     }
     
