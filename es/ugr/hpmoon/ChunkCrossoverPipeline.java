@@ -30,7 +30,13 @@ import ec.vector.VectorIndividual;
 public class ChunkCrossoverPipeline extends BreedingPipeline{
     public static final String P_TOSS = "toss";
     public static final String P_CROSSOVER = "chunkxover";
+    public static final String P_DISJOINT = "disjunct";
+    public static final String DISJOINT_TRUE = "true";
+    public static final String DISJOINT_FALSE = "false";
+    public static final String DISJOINT_NONE = "none";
     public static final int NUM_SOURCES = 2;
+    
+    public String disjoint;
 
     /** Should the pipeline discard the second parent after crossing over? */
     public boolean tossSecondParent;
@@ -61,6 +67,11 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         Parameter def = defaultBase();
         tossSecondParent = state.parameters.getBoolean(base.push(P_TOSS),
             def.push(P_TOSS),false);
+        
+        //DISJUNCT
+        disjunct = state.parameters.getString(base.push(P_DISJOINT), null);
+        if(disjoint==null || (disjo))
+            state.output.fatal("ERROR: parameter "+P_DISJOINT+" must not be null");
         }
         
     /** Returns 2 * minimum number of typical individuals produced by any sources, else
@@ -137,6 +148,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             VectorIndividual parent0 = parents[0];
             VectorIndividual parent1 = parents[1];
             
+            
             state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
             state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             
@@ -147,11 +159,12 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
 
             //DEBUG!!! DELETE!!!!!!!!!!!!!!!!!!!!!!!!
             //islandId = 0;
-            boolean disjunt = false;
+           
             //END DEBUG 
             
             //Creating split points and cutting the individual in pieces
             int[] points = this.getCutPoints(numberOfIslands, chunkSize, false);
+
             
             Object[] chunks0 = new Object[numberOfIslands];
             Object[] chunks1 = new Object[numberOfIslands];
@@ -167,7 +180,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             int pos = (islandId+1)%numberOfIslands;
             int lastsize = parent0.genomeLength()-points[points.length-1];
             
-            if(disjunt == false){
+            if(disjunct.equals(DISJOINT_FALSE)){
+                state.output.message("DISJUNTOS "+pre+" " +islandId+" "+pos);
                 Object[] forChunk0 = new Object[3];
                 Object[] forChunk1 = new Object[3];
                 
@@ -201,7 +215,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             
             
             
-            if(disjunt == false){
+            if(disjunct.equals(DISJOINT_FALSE)){
                 
                 int[] newpoints = new int[2];
                 newpoints[0] = chunkSize;
@@ -222,7 +236,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
                 chunks0[pos] = chunks0_3[2];
                 
                 Object[] chunks1_3 = new Object[3]; 
-                chunk0.split(newpoints, chunks1_3);
+                chunk1.split(newpoints, chunks1_3);
                 chunks1[pre] = chunks1_3[0];
                 chunks1[islandId] = chunks1_3[1];
                 chunks1[pos] = chunks1_3[2];
