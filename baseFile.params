@@ -12,7 +12,9 @@ print-unused-params =               true
 
 #STATISTICS
 stat =                                  es.ugr.hpmoon.HPMOONStatistics
-
+stat.silent.print = true
+stat.do-per-generation-description = false
+stat.do-generation = false
 
 #NSGA2 SPECIES
 pop.subpop.0.species.fitness =	ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
@@ -69,8 +71,6 @@ pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.species = ec.vector.FloatVectorSpecies
 pop.subpop.0.species.fitness = ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
 pop.subpop.0.species.ind = ec.vector.DoubleVectorIndividual
-pop.subpop.0.species.min-gene = 0
-pop.subpop.0.species.max-gene = 1
 
 pop.subpop.0.species.crossover-type = sbx
 pop.subpop.0.species.crossover-distribution-index = 20
@@ -101,6 +101,7 @@ exch.select = ec.select.TournamentSelection
 exch.start = 0
 exch.size = 1 
 exch.mod = 5
+exch.chatty = false
 
 
 

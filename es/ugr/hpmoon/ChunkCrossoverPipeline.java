@@ -94,7 +94,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         int islandId = info[0];
        
             
-            
+        
             
         // how many individuals should we make?
         int n = typicalIndsProduced();
@@ -155,7 +155,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             //islandId = 0;
            
             //END DEBUG 
-            
+            //state.output.message(islandId+" "+numberOfIslands);
             
            
             VectorIndividual smallFather = HPMOONUtils.getSubIndividual(parent0, islandId, numberOfIslands, disjoint);

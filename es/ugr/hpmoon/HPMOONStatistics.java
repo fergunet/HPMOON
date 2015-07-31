@@ -17,8 +17,10 @@
 package es.ugr.hpmoon;
 
 import ec.EvolutionState;
+import ec.multiobjective.MultiObjectiveFitness;
 import ec.multiobjective.MultiObjectiveStatistics;
 import ec.util.Parameter;
+import java.util.ArrayList;
 
 /**
  *
@@ -32,7 +34,7 @@ public class HPMOONStatistics extends MultiObjectiveStatistics{
         super.setup(state,base);
         initTime = System.currentTimeMillis();
     }
-    
+        
     public void finalStatistics(final EvolutionState state, final int result){
         //bypassFinalStatistics(state, result);  // just call super.super.finalStatistics(...)
         super.finalStatistics(state, result);

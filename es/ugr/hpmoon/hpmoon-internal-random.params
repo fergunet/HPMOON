@@ -14,6 +14,7 @@ print-unused-params =               true
 stat =                                  es.ugr.hpmoon.HPMOONStatistics
 stat.file =				$salida.stat
 stat.front =                            $paretofront.stat
+stat.silent.print =             true
 
 #NSGA2 SPECIES
 pop.subpop.0.species.fitness =	ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
@@ -100,6 +101,7 @@ pop.subpop.3.size = 10
 pop.subpop.4.size = 10
 pop.subpop.5.size = 10
 
+exch.chatty = false
 exch = es.ugr.hpmoon.InterPopulationRandomExchange
 exch.select = ec.select.TournamentSelection
 #the size for each subpop is necessary

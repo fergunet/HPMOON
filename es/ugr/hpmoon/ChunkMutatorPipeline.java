@@ -19,6 +19,7 @@ package es.ugr.hpmoon;
 import ec.BreedingPipeline;
 import ec.EvolutionState;
 import ec.Individual;
+import ec.app.multiplexer.MultiplexerData;
 import ec.util.Parameter;
 import ec.vector.VectorDefaults;
 import ec.vector.VectorIndividual;
@@ -58,7 +59,7 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
         int[]info =  HPMOONUtils.getIslandIdAndNumIslands(state, subpopulation, thread);
         int numberOfIslands = info[1];
         int islandId = info[0];
-        
+        //state.output.message("MUTANDO EN ISLA "+subpopulation);
         
 
 // grab individuals from our source and stick 'em right into inds.
