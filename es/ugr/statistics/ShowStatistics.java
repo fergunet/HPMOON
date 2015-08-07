@@ -17,6 +17,7 @@
 package es.ugr.statistics;
 
 import jmetal.qualityIndicator.Hypervolume;
+import jmetal.qualityIndicator.Spread;
 import jmetal.util.NonDominatedSolutionList;
 import jmetal.util.ExtractParetoFront;
 
@@ -27,17 +28,49 @@ import jmetal.util.ExtractParetoFront;
 public class ShowStatistics {
     public static String JOB_ID = "job.";
     public static String STAT_EXTENSION = "stat";
+    public static String COLUMNS_EXTENSION = "columns";
     private double[][] truePareto;
     
     
-    public void showMOstatistics(String filedescriptor){
-    Hypervolume hv = new Hypervolume();
+    public void showMOstatistics(String directory, String filedescriptor, int numJobs){
+        Hypervolume hvcalculator = new Hypervolume();
+        Spread spreadcalculator = new Spread();
+        
+        
+        double[] hvs = new double[numJobs];
+        double[] spreads = new double[numJobs];
+        double[] idcs = new double[numJobs];
+        double[] avgnumsols = new double[numJobs];
+        double[] times = new double[numJobs];
+        
+        for(int i = 0; i<numJobs; i++){
+            String filename = directory+"/"+JOB_ID + i+"."+filedescriptor+".front";
+            double[][] pareto = extractParetoFromIslandsFile(filename, 2);
+            double hv = hvcalculator.hypervolume(pareto, truePareto, 2);
+            double spread = spreadcalculator.spread(pareto, truePareto, 2);
+            double idc = -1; //Finish
+            double avnumsol = getAverageNumSols(filename);
+            String filenameTime = directory+"/"+JOB_ID + i+"."+filedescriptor+".stat";
+            double time = readTime(filenameTime);
+            System.out.println(hv+"\t"+spread+"\t"+idc+"\t"+avnumsol+"\t"+time);
+            
+        }
+        
+    
     }
     
-    public double[] extractParetoFromIslandsFile(String filename, int dimensions){
+    public double[][] extractParetoFromIslandsFile(String filename, int dimensions){
         ExtractParetoFront epf = new ExtractParetoFront(filename, dimensions);
         
         return null;
+    }
+    
+    public double getAverageNumSols(String filename){
+        return -1;
+    }
+    
+    public double readTime(String filename){
+        return -1;
     }
     
     
