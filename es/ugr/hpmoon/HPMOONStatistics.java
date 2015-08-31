@@ -37,7 +37,7 @@ public class HPMOONStatistics extends MultiObjectiveStatistics{
         
     public void finalStatistics(final EvolutionState state, final int result){
         //bypassFinalStatistics(state, result);  // just call super.super.finalStatistics(...)
-        super.finalStatistics(state, result);
+        super.finalStatistics(state, result); 
         if (doFinal){
             long spentTime = System.currentTimeMillis() - initTime;
             state.output.println("TIME "+spentTime, statisticslog);

@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jmetal.core.SolutionSet;
 import jmetal.qualityIndicator.Hypervolume;
 import jmetal.qualityIndicator.InvertedGenerationalDistance;
 import jmetal.qualityIndicator.Spread;
@@ -57,7 +58,7 @@ public class ShowStatistics {
         try {
             writer = new PrintWriter(columnsFile, "UTF-8");
             
-
+            writer.write("HV\tSPREAD\tigd\tsols\ttime\n");
             for (int i = 0; i < numJobs; i++) {
                 String filename = directory + "/" + JOB_ID + i + "." + filedescriptor + "_front.stat";
                 String filenameTime = directory + "/" + JOB_ID + i + "." + filedescriptor + "_salida.stat";
@@ -69,7 +70,7 @@ public class ShowStatistics {
                 if(filedescriptor.equals("128_true_512_zdt1"))
                     System.out.println("PARA");
                 double hv = hvcalculator.hypervolume(pareto, truePareto, 2);
-                double hvtp = hvcalculator.hypervolume(truePareto, truePareto, 2);
+                //double hvtp = hvcalculator.hypervolume(truePareto, truePareto, 2);
                 double spread = spreadcalculator.spread(pareto, truePareto, 2);
                 double igd = igdcalculator.invertedGenerationalDistance(pareto, truePareto, 2);
                 int numsol = pareto.length;
@@ -78,10 +79,14 @@ public class ShowStatistics {
                 System.out.println(toPrint);
                 writer.write(toPrint);
                 
-                writerPareto = new PrintWriter(filename+"ONLYPARETO","UTF-8"); //SOBREESCSRIBEEEE! AGH!
+                /*writerPareto = new PrintWriter(filename+"ONLYPARETO","UTF-8");
                 for(int j = 0; j<pareto.length;j++)
                     writerPareto.write(pareto[0]+" "+pareto[1]+"\n");
-                writerPareto.close();
+                writerPareto.close();*/
+                System.out.println("TRUE PARETO");
+                printPareto(truePareto);
+                System.out.println("PARETO");
+                printPareto(pareto);
 
             }
             writer.close();
@@ -100,6 +105,10 @@ public class ShowStatistics {
         return epf.getParetoFrontBidim();
     }
     
+    private void printPareto(double[][] pareto){
+        for(int i = 0; i<pareto.length;i++)
+            System.out.println(pareto[i][0]+"\t"+pareto[i][1]);
+    }
     
     public double readTime(String filename){
         File f = new File(filename);
@@ -115,7 +124,7 @@ public class ShowStatistics {
         String[] disjoint = {"none","true","false"};
         int[] islands = {8, 32, 128};
         String[] dimensions = {"512","2048"};
-        String dir = "/home/pgarcia/hpmoondata";
+        String dir = "/home/pgarcia/hpmoondata/fixedTime";
         //job.22.32_false_512_zdt2_front.stat
         for(String p:problems){
             String trueparetofile = dir+"/"+p+".truepareto";
@@ -124,6 +133,7 @@ public class ShowStatistics {
                 for(String disj:disjoint)
                     for(String dim:dimensions){
                         String filedescriptor = is+"_"+disj+"_"+dim+"_"+p;
+                        System.out.println("OPENING "+filedescriptor);
                         ss.showMOstatistics(dir, filedescriptor , 30,truepareto);
                     }
                 

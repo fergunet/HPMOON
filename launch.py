@@ -18,7 +18,7 @@ problems = ["zdt1","zdt2","zdt3","zdt6"]
 #pop.subpop.0.species.pipe.disjoint = false
 #pop.subpop.0.species.pipe.source.0.disjoint = none
 
-baseFile = "baseFile.params"
+baseFile = "baseFileTime.params"
 jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
 
 for ni in numberOfIslands:
