@@ -40,6 +40,7 @@ public class HPMOONStatistics extends MultiObjectiveStatistics{
         super.finalStatistics(state, result); 
         if (doFinal){
             long spentTime = System.currentTimeMillis() - initTime;
+            state.output.println("GENERATIONS "+state.generation, statisticslog);
             state.output.println("TIME "+spentTime, statisticslog);
         }
     }
