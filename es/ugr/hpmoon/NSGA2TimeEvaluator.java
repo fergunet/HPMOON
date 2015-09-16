@@ -33,7 +33,7 @@ public class NSGA2TimeEvaluator extends NSGA2Evaluator{
         
         runtime = state.parameters.getLong(base.push(P_RUNTIME), null,-1);
         if(runtime <=0)
-            state.output.fatal("ERROR: Parameter "+P_RUNTIME+" must be set and higher than 0");
+            state.output.fatal("ERROR in NSGA2TimeEvaluator.java: Parameter "+P_RUNTIME+" must be set and higher than 0");
         this.initTime = System.currentTimeMillis();
         
     }

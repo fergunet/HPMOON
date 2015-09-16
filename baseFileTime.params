@@ -18,7 +18,7 @@ stat.do-generation = false
 
 #NSGA2 SPECIES
 pop.subpop.0.species.fitness =	ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
-eval =				ec.multiobjective.nsga2.NSGA2Evaluator
+eval =				es.ugr.hpmoon.NSGA2TimeEvaluator
 breed =				ec.multiobjective.nsga2.NSGA2Breeder
 #/NSGA2 SPECIES
 generations = 500000000

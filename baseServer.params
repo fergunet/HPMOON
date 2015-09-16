@@ -1,0 +1,8 @@
+exch = es.ugr.hpmoon.IslandRandomExchange
+exch.i-am-server = true
+exch.mailbox-capacity = 200
+
+exch.start = 0
+exch.size = 1 
+exch.mod = 5
+exch.chatty = false
