@@ -5,23 +5,23 @@ import paramiko
 import time
 
 populationSize = 1024
-numberOfIslands = [4]
-disjoint = ["true"]
-dimension = [512]
-problems = ["zdt1"]
-numJobs = 5
+numberOfIslands = [8,32,128]
+disjoint = ["true","false","none"]
+dimension = [512,2048]
+problems = ["zdt1","zdt2","zdt3","zdt6"]
+numJobs = 30
 
 #numberOfIslands = [8,32,128]
 #disjoint = ["true","false","none"]
 #dimension = [512,2048]
 #problems = ["zdt1","zdt2","zdt3","zdt6"]
 #DONT FORGET TIME!!!!! AND 
-runtime = "10000"
+
 baseFile = "baseFileIsland.params"
 baseServerFileName = "baseServer.params"
 
 
-serverIp = "localhost"
+serverIp = "compute-0-1"
 serverPort = "8999"
 islandIdHeader = "isla"
 jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
@@ -54,8 +54,10 @@ def generateServerFile(serverfilename, numIsls):
 
 #iId starts in 0!
 def runIslandFile(runfile, iId):
-    hostname = "compute-0-"+`(iId+1)%16`
+    hostname = "compute-0-"+`(iId)%16+1`
+    print("Island "+`iId`+" trying to connect to "+hostname)
     return
+    #hostname = "localhost"
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname)
@@ -65,7 +67,7 @@ def runIslandFile(runfile, iId):
     
     ssh.exec_command(command)
     
-
+filesL = []
 for ni in numberOfIslands:
     serverFileName = "server"+`ni`+"_.params"
     generateServerFile(serverFileName,ni)
@@ -97,11 +99,18 @@ for ni in numberOfIslands:
                                 f1.write("pop.subpop.0.species.pipe.source.0.disjoint = "+d+"\n");
                                 f1.write("pop.subpop.0.species.min-gene = 0\n");	
                                 f1.write("pop.subpop.0.species.max-gene = 1\n"); 
+                                if dim == 2048:
+                                    runtime = "100000"
+                                else:
+                                    runtime = "25000"
                                 f1.write("eval.runtime = "+runtime+"\n");
                                 f1.write("hpmoon.num-islands = "+`ni`+"\n")
                                 f1.write("hpmoon.island-id = "+`islId`+"\n")
-                                f1.write("stat.front = "+fileheader+".front\n")
-                                f1.write("stat.file  = "+fileheader+".stats\n")
+                                statsfile = fileheader+".stats"
+                                frontfile = fileheader+".front"
+                                f1.write("stat.front = "+frontfile+"\n")
+                                f1.write("stat.file  = "+statsfile+"\n")
+                                filesL.append(statsfile)
                                 f1.write("seed.0 = 123"+`islId`+"\n")
                                 f1.write("exch.id = isla"+`islId`+"\n")
                                 port = 9000+islId
@@ -115,4 +124,8 @@ for ni in numberOfIslands:
                     print("RUNNING SERVER: "+serverFileName)
                     os.system(jdk+" es.ugr.hpmoon.IslandRandomExchange -file "+serverFileName)
                     time.sleep(5)
+                    for fil in filesL:
+                        print "Cleaning trash in file "+fil
+                        os.system("LASTDATA=$(tail -n 2  "+fil+") ; echo \"$LASTDATA\" > "+fil)
+                    filesL = []
                     
