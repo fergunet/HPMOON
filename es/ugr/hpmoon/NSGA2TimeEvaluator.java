@@ -26,7 +26,7 @@ import ec.util.Parameter;
  */
 public class NSGA2TimeEvaluator extends NSGA2Evaluator{
     public static final String P_RUNTIME = "runtime";
-    long initTime;
+    public long initTime;
     long runtime;
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
@@ -34,12 +34,14 @@ public class NSGA2TimeEvaluator extends NSGA2Evaluator{
         runtime = state.parameters.getLong(base.push(P_RUNTIME), null,-1);
         if(runtime <=0)
             state.output.fatal("ERROR in NSGA2TimeEvaluator.java: Parameter "+P_RUNTIME+" must be set and higher than 0");
-        this.initTime = System.currentTimeMillis();
+        this.initTime = -1;
         
     }
 
     @Override
     public boolean runComplete(final EvolutionState state) {
+        if(initTime<0)
+            this.initTime = System.currentTimeMillis();
         long actual = System.currentTimeMillis();
         if ((actual - initTime) > runtime) {
             return true;

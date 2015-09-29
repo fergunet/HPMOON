@@ -28,21 +28,23 @@ import java.util.ArrayList;
  */
 public class HPMOONStatistics extends MultiObjectiveStatistics{
     
-    public long initTime;
+
     @Override
     public void setup(final EvolutionState state, final Parameter base){
         super.setup(state,base);
-        initTime = System.currentTimeMillis();
+
     }
         
     public void finalStatistics(final EvolutionState state, final int result){
         //bypassFinalStatistics(state, result);  // just call super.super.finalStatistics(...)
         super.finalStatistics(state, result); 
-        if (doFinal){
-            long spentTime = System.currentTimeMillis() - initTime;
+        //if (doFinal){
+            
             state.output.println("GENERATIONS "+state.generation, statisticslog);
+            long initTime = ((NSGA2TimeEvaluator)(state.evaluator)).initTime;
+            long spentTime = System.currentTimeMillis() - initTime;
             state.output.println("TIME "+spentTime, statisticslog);
-        }
+        //} REMOVED doFinal (set in parameterFiles) to avoid printing the individuals! 
     }
     
 }

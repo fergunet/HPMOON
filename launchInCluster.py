@@ -3,6 +3,7 @@ import os
 import sys
 import paramiko
 import time
+import glob
 
 populationSize = 1024
 numberOfIslands = [8,32,128]
@@ -29,9 +30,9 @@ jdk = "java"
 launchDir = "/home/pgarcia/ECJ/classes"
 
 #evorq
-#serverIp = "localhost"
-#jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
-#launchDir = "/home/pgarcia/NetBeansProjects/ECJ/build/classes"
+serverIp = "localhost"
+jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
+launchDir = "/home/pgarcia/NetBeansProjects/ECJ/build/classes"
 #UNCOMMENT hostname = "localhost" BELOW!!!!
 
 def generateServerFile(serverfilename, numIsls):
@@ -62,13 +63,23 @@ def generateServerFile(serverfilename, numIsls):
         f.close()
                 
 
-#def keepLastLines(numLines):
+def killJavas():
+    for c in range(0,16):
+        hostname = "compute-0-"+`c`
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname)
+        print("Killing Java in "+hostname)
+        ssh.exec_command("killall java")
+        
+        
 
 #iId starts in 0!
 def runIslandFile(runfile, iId):
-    hostname = "compute-0-"+`(iId)%16+1`
+    computeId = (iId)%16+1
+    hostname = "compute-0-"+`computeId`
     print("Island "+`iId`+" trying to connect to "+hostname)
-    #hostname = "localhost"
+    hostname = "localhost"
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname)
@@ -86,6 +97,7 @@ for ni in numberOfIslands:
         for dim in dimension:
             for p in problems:
                 for j in range(0,numJobs):
+                    #filesToReduce = "job."+`j`+"."+`ni`+"_"+d+"_"+`dim`+"_*.stats"
                     for islId in range(0,ni):
                         fileheader = "job."+`j`+"."+`ni`+"_"+d+"_"+`dim`+"_"+p+"_id_"+`islId`
                         runfile = fileheader+"_.params"
@@ -141,8 +153,13 @@ for ni in numberOfIslands:
                     print("RUNNING SERVER: "+serverFileName)
                     os.system(jdk+" es.ugr.hpmoon.IslandRandomExchange -file "+serverFileName)
                     time.sleep(5)
-                    for fil in filesL:
-                        print "Cleaning trash in file "+fil
-                        os.system("LASTDATA=$(tail -n 2  "+fil+") ; echo \"$LASTDATA\" > "+fil)
-                    filesL = []
+                    print("SERVER CLOSED.")
+                    #for file in glob.glob(filesToReduce):
+                    #    print("Cleaning "+file)
+                    #    os.system("LASTDATA=$(tail -n 2  "+file+") ; echo \"$LASTDATA\" > "+file)
+                    time.sleep(5)
+                    killJavas()
+                    time.sleep(5)
+                    print("Javas Killed\n")
+                    
                     
