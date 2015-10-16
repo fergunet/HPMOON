@@ -6,7 +6,7 @@ import time
 import glob
 
 populationSize = 1024
-numberOfIslands = [8,32,128]
+numberOfIslands = [32]
 disjoint = ["true","false","none"]
 dimension = [512,2048]
 problems = ["zdt1","zdt2","zdt3","zdt6"]
@@ -30,9 +30,9 @@ jdk = "java"
 launchDir = "/home/pgarcia/ECJ/classes"
 
 #evorq
-serverIp = "localhost"
-jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
-launchDir = "/home/pgarcia/NetBeansProjects/ECJ/build/classes"
+#serverIp = "localhost"
+#jdk = "/home/pgarcia/jdk1.8.0_45/bin/java"
+#launchDir = "/home/pgarcia/NetBeansProjects/ECJ/build/classes"
 #UNCOMMENT hostname = "localhost" BELOW!!!!
 
 def generateServerFile(serverfilename, numIsls):
@@ -64,7 +64,7 @@ def generateServerFile(serverfilename, numIsls):
                 
 
 def killJavas():
-    for c in range(0,16):
+    for c in range(0,17):
         hostname = "compute-0-"+`c`
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -79,7 +79,7 @@ def runIslandFile(runfile, iId):
     computeId = (iId)%16+1
     hostname = "compute-0-"+`computeId`
     print("Island "+`iId`+" trying to connect to "+hostname)
-    hostname = "localhost"
+    #hostname = "localhost"
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname)
@@ -138,7 +138,7 @@ for ni in numberOfIslands:
                                 filesL.append(statsfile)
                                 f1.write("seed.0 = 123"+`islId`+"\n")
                                 f1.write("exch.id = isla"+`islId`+"\n")
-                                port = 9000+islId
+                                port = 10000+islId
                                 f1.write("exch.client-port = "+`port`+"\n")
                                 f1.write("exch.server-addr = "+serverIp+"\n")
                                 f1.write("exch.server-port = "+serverPort+"\n")
@@ -159,7 +159,7 @@ for ni in numberOfIslands:
                     #    os.system("LASTDATA=$(tail -n 2  "+file+") ; echo \"$LASTDATA\" > "+file)
                     time.sleep(5)
                     killJavas()
-                    time.sleep(5)
+                    time.sleep(10)
                     print("Javas Killed\n")
                     
                     

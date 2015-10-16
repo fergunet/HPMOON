@@ -34,10 +34,12 @@ for ni in numberOfIslands:
                     mutationProb = 1/chunkSize
                 if d == "false":
                     mutationProb = 1/(chunkSize*3)
-                with open(baseFile) as f:
+                f = open(baseFile)
+                try:
                     lines = f.readlines()
                     lines = [l for l in lines]
-                    with open(runfile, "w") as f1:
+                    f1 = open(runfile, "w")
+                    try:
                         f1.writelines(lines)
                         f1.write("pop.subpops = "+`ni`+"\n");
                         f1.write("eval.problem.type = "+p+"\n");
@@ -54,9 +56,18 @@ for ni in numberOfIslands:
                             f1.write("pop.subpop.0.species.max-gene.0 = 1\n");
                         else:
                             f1.write("pop.subpop.0.species.min-gene = 0\n");	
-                            f1.write("pop.subpop.0.species.max-gene = 1\n");                            
+                            f1.write("pop.subpop.0.species.max-gene = 1\n");
+                        if dim == 2048:
+                            runtime = "100000"
+                        else:
+                            runtime = "25000"
+                        f1.write("eval.runtime = "+runtime+"\n");
                         for islandid in range(0,ni):
                             f1.write("exch.subpop."+`islandid`+".select.size = 2\n")
                             f1.write("pop.subpop."+`islandid`+".size ="+`subpopsize`+"\n")
+                    finally:
+                        f1.close()
+                finally:
+                    f.close()
                 os.system(jdk+" ec.Evolve -file "+runfile)
                            
