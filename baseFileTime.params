@@ -15,6 +15,7 @@ stat =                                  es.ugr.hpmoon.HPMOONStatistics
 stat.silent.print = true
 stat.do-per-generation-description = false
 stat.do-generation = false
+stat.do-final = false
 
 #NSGA2 SPECIES
 pop.subpop.0.species.fitness =	ec.multiobjective.nsga2.NSGA2MultiObjectiveFitness
