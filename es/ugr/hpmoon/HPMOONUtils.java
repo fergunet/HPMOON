@@ -31,6 +31,7 @@ public class HPMOONUtils {
     public static final String DISJOINT_TRUE = "true";
     public static final String DISJOINT_FALSE = "false";
     public static final String DISJOINT_NONE = "none";
+    public static final String DISJOINT_FALSE_VARIABLE = "false_variable";
     
     public static int[] getIslandIdAndNumIslands(EvolutionState state, int subpopulation, int thread){
         
@@ -110,7 +111,24 @@ public class HPMOONUtils {
                     chunk0.setGenome(chunkGenome0);
                     return chunk0;
                 }else{
-                    return chunk0;
+                    if(disj.equals(DISJOINT_FALSE_VARIABLE)){
+                        //DISJUNTOS VARIABLES
+                        int extraChunks = 2;
+                        Object[] forChunk0 = new Object[2*extraChunks+1];
+                        int middle = extraChunks+1;
+                        for(int j=1; j<=extraChunks;j++){
+                            forChunk0[middle-j] = chunks0[(islandId-j)%numberOfIslands];
+                            forChunk0[middle+j] = chunks0[(islandId+j)%numberOfIslands];
+                        }
+                        
+                        forChunk0[middle]=chunks0[islandId];
+                        
+                        chunk0.join(forChunk0);
+                        return chunk0;
+                        
+                    }else{
+                        return chunk0;
+                    }
                 }
             }
     }
