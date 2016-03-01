@@ -112,7 +112,7 @@ public class HPMOONUtils {
                     return chunk0;
                 }else{
                     if(disj.equals(DISJOINT_FALSE_VARIABLE)){
-                        //DISJUNTOS VARIABLES
+                        //NO DISJUNTO VARIABLE
                         int extraChunks = 2;
                         Object[] forChunk0 = new Object[2*extraChunks+1];
                         int middle = extraChunks+1;
@@ -121,6 +121,7 @@ public class HPMOONUtils {
                             forChunk0[middle+j] = chunks0[(islandId+j)%numberOfIslands];
                         }
                         
+                        //creo que esto está mal, el island id no tiene por qué estar en el centro
                         forChunk0[middle]=chunks0[islandId];
                         
                         chunk0.join(forChunk0);
@@ -148,6 +149,7 @@ public class HPMOONUtils {
         Object[] chunks0 = new Object[numberOfIslands];
         originalIndividual.split(points, chunks0);
 
+
         if (disj.equals(DISJOINT_FALSE)) {
 
             int[] newpoints = new int[2];
@@ -168,17 +170,25 @@ public class HPMOONUtils {
             chunks0[islandId] = chunks0_3[1];
             chunks0[pos] = chunks0_3[2];
             originalIndividual.join(chunks0);
-
-        } else {
-            if (disj.equals(DISJOINT_TRUE)) {
-                chunks0[islandId] = changedIndividual.getGenome();
-                originalIndividual.join(chunks0);
-            } else {
-                originalIndividual.setGenome(changedIndividual.getGenome());
+        } else if (disj.equals(DISJOINT_FALSE_VARIABLE)) {
+            int extraChunks = 2;
+            int[] newpoints = new int[2*extraChunks];
+            Object[] chunks0_X = new Object[3];
+            changedIndividual.split(newpoints, chunks0_X);
+            
+            for(int i =  1; i<chunks0_X.length;i++){
+                chunks0[(islandId-i)%numberOfIslands] = chunks0_X[i];
             }
+            
+            chunks0[islandId] = ;
+
+        } else if (disj.equals(DISJOINT_TRUE)) {
+            chunks0[islandId] = changedIndividual.getGenome();
+            originalIndividual.join(chunks0);
+        } else {
+            originalIndividual.setGenome(changedIndividual.getGenome());
         }
-
-
+    
     }
     
 }
