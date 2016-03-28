@@ -18,6 +18,7 @@ package es.ugr.hpmoon;
 
 import ec.EvolutionState;
 import ec.util.Parameter;
+import ec.vector.DoubleVectorIndividual;
 import ec.vector.VectorIndividual;
 
 
@@ -113,18 +114,28 @@ public class HPMOONUtils {
                 }else{
                     if(disj.equals(DISJOINT_FALSE_VARIABLE)){
                         //NO DISJUNTO VARIABLE
+                        //System.out.println("DISJUNTO VARIABLE island id ="+islandId);
+                        //System.out.println("ORIG: "+chunk0.genotypeToStringForHumans());
                         int extraChunks = 2;
                         Object[] forChunk0 = new Object[2*extraChunks+1];
-                        int middle = extraChunks+1;
+                        int middle = extraChunks;
                         for(int j=1; j<=extraChunks;j++){
-                            forChunk0[middle-j] = chunks0[(islandId-j)%numberOfIslands];
-                            forChunk0[middle+j] = chunks0[(islandId+j)%numberOfIslands];
+                            int prepos = (islandId-j)%numberOfIslands;
+                            if(prepos<0)
+                                prepos += numberOfIslands;
+                            forChunk0[middle-j] = chunks0[prepos];
+                            int pospos = (islandId+j)%numberOfIslands;
+                            if(pospos<0)
+                                pospos += numberOfIslands;
+                            
+                            forChunk0[middle+j] = chunks0[pospos];
                         }
                         
-                        //creo que esto está mal, el island id no tiene por qué estar en el centro
+                        
                         forChunk0[middle]=chunks0[islandId];
                         
                         chunk0.join(forChunk0);
+                        //System.out.println("NEW : "+chunk0.genotypeToStringForHumans());
                         return chunk0;
                         
                     }else{
@@ -142,16 +153,15 @@ public class HPMOONUtils {
             pre = pre + numberOfIslands;
         }
         int pos = (islandId + 1) % numberOfIslands;
-        
+
         int[] points = getCutPoints(numberOfIslands, chunkSize);
 
         int lastsize = originalIndividual.genomeLength() - points[points.length - 1];
         Object[] chunks0 = new Object[numberOfIslands];
         originalIndividual.split(points, chunks0);
 
-
         if (disj.equals(DISJOINT_FALSE)) {
-
+            //NOTE TO SELF, IN FUTURE DO NOT USE DISJOINT_FALSE AS FALSE_VARIABLE IS AN EXTENSION OF THIS
             int[] newpoints = new int[2];
             newpoints[0] = chunkSize;
             newpoints[1] = chunkSize * 2;
@@ -171,24 +181,54 @@ public class HPMOONUtils {
             chunks0[pos] = chunks0_3[2];
             originalIndividual.join(chunks0);
         } else if (disj.equals(DISJOINT_FALSE_VARIABLE)) {
+            //System.out.println("CREATING");
+            //System.out.println("ORIG: "+originalIndividual.genotypeToStringForHumans());
             int extraChunks = 2;
-            int[] newpoints = new int[2*extraChunks];
-            Object[] chunks0_X = new Object[3];
+            int[] newpoints = new int[2 * extraChunks];
+
+            for(int j=0;j<2*extraChunks;j++)
+                newpoints[j] = (j+1)*chunkSize;
+            /////////////////////
+            Object[] chunks0_X = new Object[2*extraChunks+1];
             changedIndividual.split(newpoints, chunks0_X);
-            
-            for(int i =  1; i<chunks0_X.length;i++){
-                chunks0[(islandId-i)%numberOfIslands] = chunks0_X[i];
+            //System.out.println("SMOL: "+changedIndividual.genotypeToStringForHumans());
+
+            int middle = extraChunks;
+            for (int j = 1; j <= extraChunks; j++) {
+                int prepos = (islandId - j) % numberOfIslands;
+                if (prepos < 0) {
+                    prepos += numberOfIslands;
+                }
+                chunks0[prepos] = chunks0_X[middle -j];
+                
+                int pospos = (islandId + j) % numberOfIslands;
+                if (pospos < 0) {
+                    pospos += numberOfIslands;
+                }
+
+                chunks0[pospos] = chunks0_X[middle+j];
             }
             
-            chunks0[islandId] = ;
 
+
+            chunks0[islandId] = chunks0_X[middle];
+
+            originalIndividual.join(chunks0);
+            //printChunkVector(chunks0);
+            //System.out.println("BIG : "+originalIndividual.genotypeToStringForHumans());
         } else if (disj.equals(DISJOINT_TRUE)) {
             chunks0[islandId] = changedIndividual.getGenome();
             originalIndividual.join(chunks0);
         } else {
             originalIndividual.setGenome(changedIndividual.getGenome());
         }
+
+    }
     
+    private static void printChunkVector(Object[] cv){
+        for(Object o:cv)
+            System.out.print(o.toString()+" ");
+        System.out.println("");
     }
     
 }

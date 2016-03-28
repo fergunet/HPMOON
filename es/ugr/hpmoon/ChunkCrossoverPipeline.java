@@ -67,7 +67,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         
         //DISJUNCT
         disjoint = state.parameters.getString(base.push(HPMOONUtils.P_DISJOINT), null);
-        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
+        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
             state.output.fatal("ERROR: parameter "+HPMOONUtils.P_DISJOINT+" must not be null, or different than 'true', 'false' or 'none'");
         }
         
