@@ -34,6 +34,7 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
     public static final int NUM_SOURCES = 2;
     
     public String disjoint;
+    public int extraChunks;
 
     /** Should the pipeline discard the second parent after crossing over? */
     public boolean tossSecondParent;
@@ -67,8 +68,13 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
         
         //DISJUNCT
         disjoint = state.parameters.getString(base.push(HPMOONUtils.P_DISJOINT), null);
-        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
+        if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE) && !disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
             state.output.fatal("ERROR: parameter "+HPMOONUtils.P_DISJOINT+" must not be null, or different than 'true', 'false' or 'none'");
+        
+        //EXTRACHUNKS
+        if(disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE))
+            extraChunks = state.parameters.getInt(base.push(HPMOONUtils.P_EXTRACHUNKS), null);
+        
         }
         
     /** Returns 2 * minimum number of typical individuals produced by any sources, else
@@ -158,8 +164,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             //state.output.message(islandId+" "+numberOfIslands);
             
            
-            VectorIndividual smallFather = HPMOONUtils.getSubIndividual(parent0, islandId, numberOfIslands, disjoint);
-            VectorIndividual smallMother = HPMOONUtils.getSubIndividual(parent1, islandId, numberOfIslands, disjoint);
+            VectorIndividual smallFather = HPMOONUtils.getSubIndividual(parent0, islandId, numberOfIslands, disjoint,extraChunks);
+            VectorIndividual smallMother = HPMOONUtils.getSubIndividual(parent1, islandId, numberOfIslands, disjoint,extraChunks);
             
             
             //state.output.message("BEFORECHUNK0 "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
@@ -172,8 +178,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             
             
             
-            HPMOONUtils.reconstructIndividual(parent0, smallFather, disjoint, islandId, numberOfIslands);
-            HPMOONUtils.reconstructIndividual(parent1, smallMother, disjoint, islandId, numberOfIslands);
+            HPMOONUtils.reconstructIndividual(parent0, smallFather, disjoint, islandId, numberOfIslands,extraChunks);
+            HPMOONUtils.reconstructIndividual(parent1, smallMother, disjoint, islandId, numberOfIslands,extraChunks);
             
             
 

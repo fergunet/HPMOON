@@ -34,6 +34,7 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
     public static final int NUM_SOURCES = 1;
     
     private String disjoint;
+    private int extraChunks;
 
     @Override
     public void setup(EvolutionState state, Parameter base) {
@@ -43,6 +44,12 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
         if(disjoint==null || (!disjoint.equals(HPMOONUtils.DISJOINT_FALSE) && !disjoint.equals(HPMOONUtils.DISJOINT_TRUE) && !disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE) && !disjoint.equals(HPMOONUtils.DISJOINT_NONE)))
             state.output.fatal("ERROR: parameter "+HPMOONUtils.P_DISJOINT+" must not be null, or different than 'true', 'false' or 'none'");
         
+            //EXTRACHUNKS
+        if(disjoint.equals(HPMOONUtils.DISJOINT_FALSE_VARIABLE))
+            extraChunks = state.parameters.getInt(base.push(HPMOONUtils.P_EXTRACHUNKS), null);
+        
+        
+     
     }
     
     @Override
@@ -87,9 +94,9 @@ public class ChunkMutatorPipeline extends BreedingPipeline{
             //state.output.message("MUTBEFORE "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
             
                        
-            VectorIndividual chunk =  HPMOONUtils.getSubIndividual(vi, islandId, numberOfIslands, disjoint);
+            VectorIndividual chunk =  HPMOONUtils.getSubIndividual(vi, islandId, numberOfIslands, disjoint,extraChunks);
             chunk.defaultMutate(state, thread);
-            HPMOONUtils.reconstructIndividual(vi, chunk, disjoint, islandId, numberOfIslands);
+            HPMOONUtils.reconstructIndividual(vi, chunk, disjoint, islandId, numberOfIslands,extraChunks);
             
             //state.output.message("MUTAFTER  "+vi.genomeLength()+" "+vi.genotypeToStringForHumans());
 

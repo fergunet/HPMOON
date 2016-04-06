@@ -33,6 +33,7 @@ public class HPMOONUtils {
     public static final String DISJOINT_FALSE = "false";
     public static final String DISJOINT_NONE = "none";
     public static final String DISJOINT_FALSE_VARIABLE = "false_variable";
+    public static final String P_EXTRACHUNKS = "extra_chunks";
     
     public static int[] getIslandIdAndNumIslands(EvolutionState state, int subpopulation, int thread){
         
@@ -72,7 +73,7 @@ public class HPMOONUtils {
         return cutpoints;
     }
     
-    public static VectorIndividual getSubIndividual(VectorIndividual ind, int islandId, int numberOfIslands, String disj){
+    public static VectorIndividual getSubIndividual(VectorIndividual ind, int islandId, int numberOfIslands, String disj, int extraChunks){
         
         int chunkSize = ind.genomeLength()/numberOfIslands;
                        
@@ -116,7 +117,7 @@ public class HPMOONUtils {
                         //NO DISJUNTO VARIABLE
                         //System.out.println("DISJUNTO VARIABLE island id ="+islandId);
                         //System.out.println("ORIG: "+chunk0.genotypeToStringForHumans());
-                        int extraChunks = 2;
+                        //int extraChunks = 2;
                         Object[] forChunk0 = new Object[2*extraChunks+1];
                         int middle = extraChunks;
                         for(int j=1; j<=extraChunks;j++){
@@ -145,7 +146,7 @@ public class HPMOONUtils {
             }
     }
     
-    public static void reconstructIndividual(VectorIndividual originalIndividual, VectorIndividual changedIndividual, String disj, int islandId, int numberOfIslands) {
+    public static void reconstructIndividual(VectorIndividual originalIndividual, VectorIndividual changedIndividual, String disj, int islandId, int numberOfIslands, int extraChunks) {
 
         int chunkSize = originalIndividual.genomeLength() / numberOfIslands;
         int pre = (islandId - 1) % numberOfIslands;
@@ -183,7 +184,7 @@ public class HPMOONUtils {
         } else if (disj.equals(DISJOINT_FALSE_VARIABLE)) {
             //System.out.println("CREATING");
             //System.out.println("ORIG: "+originalIndividual.genotypeToStringForHumans());
-            int extraChunks = 2;
+            //int extraChunks = 2;
             int[] newpoints = new int[2 * extraChunks];
 
             for(int j=0;j<2*extraChunks;j++)
