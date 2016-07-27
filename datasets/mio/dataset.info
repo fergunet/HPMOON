@@ -1,0 +1,12 @@
+Synthetic dataset
+
+Number of features: 2
+Significant features: 1 2
+Number of clusters: 3
+
+Centroids of the clusters:
+Cluster 1: (	0.100000	0.100000	)
+Cluster 2: (	0.500000	0.900000	)
+Cluster 3: (	0.900000	0.300000	)
+
+Number of patterns: 400

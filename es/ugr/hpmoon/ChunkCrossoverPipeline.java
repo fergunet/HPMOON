@@ -152,8 +152,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             VectorIndividual parent1 = parents[1];
             
             
-            //state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            //state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            state.output.message("BEFORE0 "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            state.output.message("BEFORE1 "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             
             
 
@@ -168,13 +168,13 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             VectorIndividual smallMother = HPMOONUtils.getSubIndividual(parent1, islandId, numberOfIslands, disjoint,extraChunks);
             
             
-            //state.output.message("BEFORECHUNK0 "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
-            //state.output.message("BEFORECHUNK1 "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
+            state.output.message("BEFORECHUNK0 "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
+            state.output.message("BEFORECHUNK1 "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
             
             smallFather.defaultCrossover(state, thread,smallMother);
             
-            //state.output.message("AFTERCHUNK0  "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
-            //state.output.message("AFTERCHUNK1  "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
+            state.output.message("AFTERCHUNK0  "+smallFather.genomeLength()+" "+smallFather.genotypeToStringForHumans());
+            state.output.message("AFTERCHUNK1  "+smallMother.genomeLength()+" "+smallMother.genotypeToStringForHumans());
             
             
             
@@ -184,8 +184,8 @@ public class ChunkCrossoverPipeline extends BreedingPipeline{
             
 
 
-            //state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
-            //state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
+            state.output.message("AFTER0  "+parent0.genomeLength()+" "+parent0.genotypeToStringForHumans());
+            state.output.message("AFTER1  "+parent1.genomeLength()+" "+parent1.genotypeToStringForHumans());
             parent0.evaluated = false;
             parent1.evaluated = false;
             

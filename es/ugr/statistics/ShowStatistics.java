@@ -52,6 +52,8 @@ public class ShowStatistics {
         System.out.println(filedescriptor);
         String columnsFile = directory + "/columns/" + filedescriptor + ".txt";
        
+        if(columnsFile.equals("/home/pgarcia/hpmoonCluster/runAdapted/columns/64_false_variable_2048_zdt1.txt"))
+            System.out.println("DEBUG");
         PrintWriter writer, writerPareto;
         try {
             writer = new PrintWriter(columnsFile, "UTF-8");
@@ -59,10 +61,10 @@ public class ShowStatistics {
             writer.write("HV\tSPREAD\tigd\tsols\ttime\tgens\n");
             for (int i = 0; i < numJobs; i++) {
                 String filename = directory + "/" + JOB_ID + i + "." + filedescriptor + "_front.stat";
-                //String filenameTime = directory + "/" + JOB_ID + i + "." + filedescriptor +"_id_0.stats";//Esto es el antiguo: "_salida.stat";
-                String filenameTime = directory + "/" + JOB_ID + i + "." + filedescriptor +"_salida.stat";
+                String filenameTime = directory + "/" + JOB_ID + i + "." + filedescriptor +"_id_0.stats";//Esto es el antiguo: "_salida.stat";
+                //String filenameTime = directory + "/" + JOB_ID + i + "." + filedescriptor +"_salida.stat";
                 double[][] pareto = extractParetoFromFile(filename, 2);
-                
+                System.out.println(filename);
                 for(int pa = 0; pa<pareto.length;pa++){
                     //System.out.println(pareto[pa][0]);
                     if(pareto[pa][0]>maxX)
@@ -79,6 +81,9 @@ public class ShowStatistics {
                 if(filedescriptor.equals("32_none_2048_zdt3"))
                     System.out.println("PARA");
                 
+                if(filename.equals("/home/pgarcia/hpmoonCluster/runAdapted/job.10.64_false_variable_2048_zdt1_front.stat"))
+                    System.out.println("PARA");
+                
                 double[] maxV = {1.0,9.0};
                 double[] minV = {0.0,0.0};
                 double hv = hvcalculator.hypervolumeWithMaxMinValues(pareto, truePareto, 2,maxV,minV);
@@ -86,6 +91,8 @@ public class ShowStatistics {
                 double spread = spreadcalculator.spread(pareto, truePareto, 2);
                 double igd = igdcalculator.invertedGenerationalDistance(pareto, truePareto, 2);
                 int numsol = pareto.length;
+                System.out.println("READING "+filenameTime);
+                        
                 double time = readLastLines(filenameTime,1);
                 double gen = readLastLines(filenameTime,2);
                 String toPrint = hv + "\t" + spread + "\t" + igd + "\t" + numsol + "\t" + time+"\t"+gen+"\n";
@@ -96,15 +103,16 @@ public class ShowStatistics {
                 for(int j = 0; j<pareto.length;j++)
                     writerPareto.write(pareto[0]+" "+pareto[1]+"\n");
                 writerPareto.close();*/
-                System.out.println("TRUE PARETO");
+                //System.out.println("TRUE PARETO");
                 //printPareto(truePareto);
-                System.out.println("PARETO");
-                printPareto(pareto);
+                //System.out.println("PARETO");
+                //printPareto(pareto);
 
             }
             writer.close();
             
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println("EXCEPTION CREATING FILE " + ex.getMessage());
         }
         System.out.println("AVERAGES ");
@@ -134,8 +142,8 @@ public class ShowStatistics {
     public static void main(String [] args) {
         ShowStatistics ss = new ShowStatistics();
         String[] problems = {"zdt1","zdt2","zdt3","zdt6"};
-        String[] disjoint = {"none","true","false"};
-        int[] islands = {8,32,128};
+        String[] disjoint = {"false_variable"};
+        int[] islands = {32,64,128};
         String[] dimensions = {"512","2048"};
         String dirGlobal = "/home/pgarcia/hpmoonCluster";
         //job.22.32_false_512_zdt2_front.stat
@@ -146,7 +154,7 @@ public class ShowStatistics {
                 for(String disj:disjoint)
                     for(String dim:dimensions){
                         //String dir = dirGlobal+"/run_"+is+"_islands";
-                        String dir = dirGlobal+"/run_monoprocessor";
+                        String dir = dirGlobal+"/runAdapted";
                         String filedescriptor = is+"_"+disj+"_"+dim+"_"+p;
                         System.out.println("OPENING "+filedescriptor);
                         ss.showMOstatistics(dir, filedescriptor , 30,truepareto);
