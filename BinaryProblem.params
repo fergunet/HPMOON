@@ -14,7 +14,7 @@ multi.fitness.min.1 		= 0
 #PROBLEM
 # ==============================
 eval.problem = es.ugr.hpmoon.problem.FeatureSelection
-eval.problem.dataset = datasets/mio/dataset.data
+eval.problem.dataset = datasets/data_essex_3600/essex110.data
 
 
 

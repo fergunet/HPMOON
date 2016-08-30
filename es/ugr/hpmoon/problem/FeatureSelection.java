@@ -165,11 +165,18 @@ public class FeatureSelection extends Problem implements SimpleProblemForm
 		{
                    
                    Dataset projection = HPMoonDatasetTools.project(data, genome);
+                   // System.out.println("PSIZE "+projection.size());
                    double inter = cvi1.interClusterSeparation(projection);
                    double intra = cvi1.intraClusterCompactness(projection);
                    
                    objectives[0] = intra;
                    objectives[1] = 1/inter;
+                   
+                   //String genomeS = "";
+                   //for(boolean b:genome)
+                    //   genomeS = genomeS+b+" ";
+                    //System.out.println(genomeS);
+                    //System.out.println(objectives[0]+" "+objectives[1]);
                         /* PABLO: COMENTO ESTO
 			// Apply a clustering algorithm to a projection of the selected features 
                             

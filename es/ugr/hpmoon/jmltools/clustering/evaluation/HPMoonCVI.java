@@ -87,7 +87,10 @@ public class HPMoonCVI
 	{
 		/* Obtain the distances */ 
 		double [] distances = distances(data);
-
+                String outpu = "";
+                for(double d:distances)
+                    outpu = outpu+d+" ";
+                //System.out.println(outpu);
 		/* Order the array of distances */
 		Arrays.sort(distances);
 		
@@ -123,7 +126,7 @@ public class HPMoonCVI
 	 */
 	public double interClusterSeparation (Dataset data)
 	{
-		if (this.interCusterSepar < 0)
+		//if (this.interCusterSepar < 0)
 			eval(data);
 		
 		return this.interCusterSepar;
@@ -135,7 +138,7 @@ public class HPMoonCVI
 	 */
 	public double intraClusterCompactness (Dataset data)
 	{
-		if (this.intraCusterCompac < 0)
+		//if (this.intraCusterCompac < 0)
 			eval(data);
 		
 		return this.intraCusterCompac;
