@@ -6,8 +6,8 @@ import time
 import glob
 
 populationSize = 1024
-numberOfIslands = [8,16,32,64,128]
-disjoint = ["none"]
+numberOfIslands = [8,32,128]
+disjoint = ["none","true","false"]
 dimension = [3600]
 problems = ["DATASETS"]
 numJobs = 10

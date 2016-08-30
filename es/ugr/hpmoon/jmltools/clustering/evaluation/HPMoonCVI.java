@@ -87,10 +87,10 @@ public class HPMoonCVI
 	{
 		/* Obtain the distances */ 
 		double [] distances = distances(data);
-                String outpu = "";
+                /*String outpu = "";
                 for(double d:distances)
                     outpu = outpu+d+" ";
-                //System.out.println(outpu);
+                System.out.println(outpu);*/
 		/* Order the array of distances */
 		Arrays.sort(distances);
 		
