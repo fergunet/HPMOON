@@ -70,7 +70,7 @@ public class FeatureSelection extends Problem implements SimpleProblemForm
 	public void setup(final EvolutionState state, final Parameter base)
     {
     	super.setup(state,base);   // always call super.setup(...) first if it exists!
-        System.out.println("Q PASA");
+        //System.out.println("Q PASA");
     	try
     	{
     		/* default base for the parameters used to configure this problem */
@@ -134,6 +134,8 @@ public class FeatureSelection extends Problem implements SimpleProblemForm
 	 */
 	public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation, final int threadnum)
 	{
+            //System.out.println("EVALUATING IN GEN "+state.generation);
+
 		/* Evaluate only not already evaluated individuals */
 		if (ind.evaluated)
 			return;
